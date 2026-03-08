@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Phosphor Icons for premium aesthetic -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-content">
+        <h1 id="greeting">Good evening</h1>
+        <p id="date-display" class="date-display">Checking the void...</p>
+      </div>
+      <div class="header-actions">
+        <button id="settings-btn" class="btn-icon head-btn" title="Settings">
+          <i class="ph ph-gear"></i>
+        </button>
+        <button id="add-category-btn" class="btn btn-primary head-btn">
+          <i class="ph ph-folder-plus"></i> New Category
+        </button>
+      </div>
+    </header>
+
+    <main class="dashboard-grid">
+      <!-- Fixed Assignments Panel -->
+      <div id="canvas-widget-container" class="category-card" style="display: none;">
+        <div class="category-header">
+          <h3 class="category-title">
+            <i class="ph ph-student"></i>
+            Assignments
+          </h3>
+          <div class="category-actions">
+             <button id="refresh-canvas-btn" class="btn-icon" title="Refresh">
+              <i class="ph ph-arrows-clockwise"></i>
+            </button>
+          </div>
+        </div>
+        <div id="canvas-assignments-list" class="links-list">
+          <!-- Assignments injected here -->
+        </div>
+      </div>
+
+      <!-- Categories will be injected here by script.js -->
+      <div id="dashboard-categories" class="categories-grid"></div>
+    </main>
+  </div>
+
+  <!-- Modals -->
+
+  <!-- Add/Edit Link Modal -->
+  <dialog id="link-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="link-modal-title">Add Link</h2>
+        <button type="button" class="btn-icon close-modal-btn">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      <form id="link-form">
+        <input type="hidden" id="link-id">
+        <input type="hidden" id="link-category-id">
+        <div class="form-group">
+          <label for="link-name">Name</label>
+          <input type="text" id="link-name" placeholder="e.g. GitHub" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="link-url">URL</label>
+          <input type="url" id="link-url" placeholder="https://example.com" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="link-desc" style="display:flex; justify-content:space-between; align-items:center;">
+            <span>Description (Optional)</span>
+            <button type="button" id="auto-fill-desc-btn" class="btn-icon" title="Auto-fill description" style="width: 1.8rem; height: 1.8rem; font-size: 1rem; border-color: var(--accent-purple);">
+              <i class="ph ph-sparkle"></i>
+            </button>
+          </label>
+          <input type="text" id="link-desc" placeholder="e.g. A great resource for..." autocomplete="off">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary close-modal-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="save-link-btn">Save Link</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Add Category Modal -->
+  <dialog id="category-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add Category</h2>
+        <button type="button" class="btn-icon close-modal-btn">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      <form id="category-form">
+        <div class="form-group">
+          <label for="category-name">Category Name</label>
+          <input type="text" id="category-name" placeholder="e.g. Work, Social, Reading" required autocomplete="off">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary close-modal-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Category</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Settings Modal -->
+  <dialog id="settings-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button type="button" class="btn-icon close-modal-btn">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      <form id="settings-form">
+        <div class="form-group">
+          <label for="canvas-domain">Canvas Domain</label>
+          <input type="text" id="canvas-domain" placeholder="e.g. canvas.instructure.com" autocomplete="off">
+          <small class="helper-text">Leave blank to disable Canvas integration</small>
+        </div>
+        <div class="form-group">
+          <label for="canvas-token">Canvas API Token</label>
+          <input type="password" id="canvas-token" placeholder="Your Canvas Access Token" autocomplete="off">
+          <small class="helper-text">Generated from Account > Settings > Approved Integrations</small>
+        </div>
+        <div class="form-group" style="padding-top: 1rem; border-top: 1px dashed var(--border-color);">
+          <label for="gemini-token">Gemini API Key (Optional)</label>
+          <input type="password" id="gemini-token" placeholder="AI Auto-fill Key" autocomplete="off">
+          <small class="helper-text">Used for ✨ Auto-fill. If empty, falls back to basic site scraping.</small>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary close-modal-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Settings</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
